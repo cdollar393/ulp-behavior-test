@@ -1,0 +1,3 @@
+[submodule "components/HULP"]
+	path = components/HULP
+	url = https://github.com/boarchuz/HULP.git
