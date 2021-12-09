@@ -127,8 +127,13 @@ void initUlp(unsigned int delaySecs) {
   ESP_LOGI(TAG, "Starting ULP program with %ds delay...", delaySecs);
 
   int ulpProgDelay = delaySecs * 1000ULL * 1000;
-  ESP_ERROR_CHECK(hulp_ulp_load(program, sizeof(program), ulpProgDelay, 0));
-  ESP_ERROR_CHECK(hulp_ulp_run(0));
+  // alternate way to start ULP using HULP lib (no change in behavior)
+  //ESP_ERROR_CHECK(hulp_ulp_load(program, sizeof(program), ulpProgDelay, 0));
+  //ESP_ERROR_CHECK(hulp_ulp_run(0));
+  size_t numWords = sizeof(program) / sizeof(ulp_insn_t);
+  ESP_ERROR_CHECK(ulp_process_macros_and_load(0, program, &numWords));
+  ESP_ERROR_CHECK(ulp_set_wakeup_period(0, ulpProgDelay));
+  ESP_ERROR_CHECK(ulp_run(0));
 
   ESP_LOGI(TAG, "ULP started");
 }
